@@ -3,7 +3,7 @@
 {% block body %}
 
 <script>
-let link_id = []
+let id = []
 </script>>
 {% for contact in page_obj reversed %}
 
@@ -18,7 +18,9 @@ let link_id = []
         </div>
         <div class="card-body">
             <h5 class="card-title" ></h5>
+            <div id="container_{{contact.id}}">
             <p class="card-text" id="edit_link_{{contact.id}}_p">{{ contact.content }}</p>
+                </div>
             <a href="{% url 'likes-counter' contact.id %}" style="text-decoration: none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
@@ -36,14 +38,14 @@ let link_id = []
                 </a>
 
             <script>
-            link_id.push('edit_link_{{contact.id}}')
+            id.push('{{contact.id}}')
 
             </script>
 
             {% endif %}
 
         </div>
-        <div class="card-footer text-muted">
+        <div class="card-footer text-muted" >
             At: {{ contact.time_created }}
         </div>
     </div>

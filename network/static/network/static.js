@@ -1,13 +1,35 @@
 var last_form = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-        link_id.forEach(link_func)
+        id.forEach(link_func)
 
         function link_func(value){
-          let hide_p =  document.getElementById(value + '_p').style.display = 'none'
-          document.getElementById(value).onclick = () => {
-            hide_p
+
+          document.getElementById('edit_link_' + value).onclick = function(){
+            p_element = document.getElementById('edit_link_' + value + '_p')
+            container = document.getElementById('container_' + value )
+            let create_form = document.createElement('form')
+            container.appendChild(create_form)
+            let hide_p =  p_element.style.display = 'none'
+            create_form.method = 'POST'
+            create_form.action = 'edit/' + value
+            create_textarea = document.createElement('textarea')
+            create_textarea.cols = 100
+            create_textarea.rows = 5
+            create_form.appendChild(create_textarea)
+            create_button = document.createElement('button')
+            create_button.id ='submit_' + value
+            button_id = create_button.id
+            create_button.type = 'submit'
+            create_button.innerHTML = 'Update'
+            create_form.appendChild(create_button)
+
+            document.querySelector('submit_' + value).onclick = function(){
+                console.log(create_button.id)
+            }
           }
+
+
         }
 
 
