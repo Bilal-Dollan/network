@@ -1,0 +1,12 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<form action="{% url 'create-post' %}" method="post">
+    {% csrf_token %}
+{{post_form}}
+    <button type="submit">
+        Post
+    </button>
+
+</form>
+{% endblock %}

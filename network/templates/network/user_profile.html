@@ -1,0 +1,57 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+
+<br>
+<div class="card text-center">
+  <div class="card-header">
+      <h2>{{user_info.username}} Profile Page</h2>
+  </div>
+  <div class="card-body">
+    <h5>
+    <p class="card-title">Followers: {{followers_count}}</p>
+    <p class="card-title">Following: {{following_count}}</p></h5>
+      {% if user.is_authenticated and follow %}
+
+      <br>
+      <a href="{% url 'follow-user' user_info.id %}" class="btn btn-primary">Follow</a>
+      {% endif %}
+  </div>
+</div>
+
+
+{% for post in post_list %}
+<div class="card text-center">
+  <div class="card-header">
+      <a href=" {% url 'fetch-profile' post.user.id %}">
+          {{post.user}}
+      </a>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+    <p class="card-text">{{ post.content }}</p>
+    <a href="{% url 'likes-counter' post.id %}" style="text-decoration: none">
+
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+         <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
+         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+         <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
+         <path d="M14 16h6"></path>
+         <path d="M17 13v6"></path>
+      </svg>
+        {{post.likes_counter}}
+    </a>
+      {% if post.user == user %}
+      <a href="{% url 'edit-form' post.id %}">
+          Edit
+
+      </a>
+      {% endif %}
+  </div>
+  <div class="card-footer text-muted">
+    {{ post.time_created }}
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
