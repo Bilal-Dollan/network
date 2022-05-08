@@ -20,6 +20,11 @@ let id = []
             <h5 class="card-title" ></h5>
             <div id="container_{{contact.id}}">
             <p class="card-text" id="edit_link_{{contact.id}}_p">{{ contact.content }}</p>
+                <form action="." method="post" id="form_{{contact.id}}" style="display:none">
+                    {% csrf_token %}
+                    <textarea cols="100" rows="10" id="textarea_{{contact.id}}"></textarea>
+                    <button type="submit" id="submit_{{contact.id}}">Update</button>
+                </form>
                 </div>
             <a href="{% url 'likes-counter' contact.id %}" style="text-decoration: none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

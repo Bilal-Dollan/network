@@ -173,13 +173,7 @@ def list_following(request):
 
 
 def edit_form(request, post_id):
-    editform = EditForm()
-    if request.method == "POST":
-        editform = EditForm(request.POST)
-        if editform.is_valid():
-            content = editform.cleaned_data['content']
-            user = request.user
-            post_form = Post.objects.update(user=user, content=content)
-            post_form.save()
-        return JsonResponse(f'/edit/{post_id}')
+    if request.headers.get('X-Request-With') == 'XMLHttpRequest':
+        print('SUBMITED')
 
+    return HttpResponse('Hello')

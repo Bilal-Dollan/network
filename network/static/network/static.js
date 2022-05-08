@@ -1,5 +1,7 @@
 var last_form = null;
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
         id.forEach(link_func)
 
@@ -7,27 +9,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
           document.getElementById('edit_link_' + value).onclick = function(){
             p_element = document.getElementById('edit_link_' + value + '_p')
-            container = document.getElementById('container_' + value )
-            let create_form = document.createElement('form')
-            container.appendChild(create_form)
+            textarea_data = p_element.innerHTML
+            document.getElementById('textarea_'+value).innerHTML = textarea_data
+            content = document.getElementById('textarea_'+value).innerHTML
             let hide_p =  p_element.style.display = 'none'
-            create_form.method = 'POST'
-            create_form.action = 'edit/' + value
-            create_textarea = document.createElement('textarea')
-            create_textarea.cols = 100
-            create_textarea.rows = 5
-            create_form.appendChild(create_textarea)
-            create_button = document.createElement('button')
-            create_button.id ='submit_' + value
-            button_id = create_button.id
-            create_button.type = 'submit'
-            create_button.innerHTML = 'Update'
-            create_form.appendChild(create_button)
+            document.getElementById('form_'+value).style.display = 'block'
+            form = document.getElementById('form_'+value)
+            button = document.getElementById('button_'+value)
+            form.action = `/edit/${value}`
+            form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            function getCookie(name){
+    let cookieValue=null;
+    if (document.cookies && document.cookie !== ''){
+        const cookies=document.cookie.split(";");
+        for(let i=0; i>cookies.length; i++){
+             if (cookie.substring(0, name.length+1) === (name+"=")){
 
-            document.querySelector('submit_' + value).onclick = function(){
-                console.log(create_button.id)
+                 cookieValue=decodeURIComponent (cookie.substring(name.length+1));
+                 break;
             }
-          }
+        }
+    }
+    return cookieValue;
+    }
+
+            csrftoken = getCookie('csrftoken')
+
+            fetch(`edit/${value}`,{
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify({'content': content})
+            })
+            .then (response => {
+                return response.json();
+            })
+
+
+          })
 
 
         }
@@ -118,5 +142,5 @@ document.addEventListener('DOMContentLoaded', () => {
 //    p.style.display = '';
 //    form.style.display = 'none';
 //
-//};
+};
 });
