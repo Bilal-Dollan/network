@@ -173,7 +173,7 @@ def list_following(request):
 
 
 def edit_form(request, post_id):
-    if request.headers.get('X-Request-With') == 'XMLHttpRequest':
-        print('SUBMITED')
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+       print("WORKING")
 
-    return HttpResponse('Hello')
+    return render(request, 'network/index.html')

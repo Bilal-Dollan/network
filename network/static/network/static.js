@@ -1,7 +1,3 @@
-var last_form = null;
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
         id.forEach(link_func)
 
@@ -21,33 +17,29 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             function getCookie(name){
     let cookieValue=null;
-    if (document.cookies && document.cookie !== ''){
-        const cookies=document.cookie.split(";");
-        for(let i=0; i>cookies.length; i++){
-             if (cookie.substring(0, name.length+1) === (name+"=")){
 
-                 cookieValue=decodeURIComponent (cookie.substring(name.length+1));
-                 break;
-            }
-        }
-    }
-    return cookieValue;
     }
 
-            csrftoken = getCookie('csrftoken')
 
             fetch(`edit/${value}`,{
             method: 'POST',
-            credentials: 'include',
+            credentials: 'same-origin',
             headers: {
-                       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,/;q=0.8',
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        "X-CSRFToken": csrftoken
+                    'Accept': 'application/javascript',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken':csrftoken,
             },
             body: JSON.stringify({'content': content})
             })
             .then (response => {
-                return response.json();
+                console.log(typeof response)
+            })
+            .then (data=> {
+                console.log(content);
+            })
+
+            .catch( error => {
+                console.log('Error: ' + error)
             })
 
 
