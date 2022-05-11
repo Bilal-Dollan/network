@@ -1,15 +1,15 @@
-import json
-
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+
 from network.forms import PostForm, EditForm
 from network.models import Post, LikedPost, UserFollowing, ListFollowing, UserFollowers
 from .models import User
 from django.core.paginator import Paginator
+import json
 
 
 def index(request):
@@ -154,7 +154,6 @@ def follow_user(request, user_id):
     return redirect('fetch-profile', user_id)
 
 
-# TODO
 def list_following(request):
     login_user = request.user
     all_user = User.objects.all()
@@ -174,6 +173,8 @@ def list_following(request):
 
 def edit_form(request, post_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-       print("WORKING")
+        content = json.load(request)['content']
+        Post.objects.filter(user=request.user, id=post_id).update(content=content)
+
 
     return render(request, 'network/index.html')
