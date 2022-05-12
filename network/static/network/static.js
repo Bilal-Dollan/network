@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('edit_link_' + value).style.display = 'inline-block'
              document.getElementById('edit_link_' + value + '_p').style.display = 'inline-block'
             document.getElementById('edit_link_' + value + '_p').innerHTML =  content
-          })
-        }}
+                })
+            }}
         catch(error){
         }
 
@@ -69,13 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             })
             .then (response => {
-                console.log(response)
+
             })
             .catch( error => {
                 console.log('Error: ' + error)
             })
+         let clicked_post = document.getElementById('liked_post' + value).innerHTML
 
+        $ajax({
+            type: 'GET',
+            url: `likes/counter/${value}`,
+            success:
+                console.log(clicked_post)
 
+        })
 
          }
 

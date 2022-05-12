@@ -109,13 +109,21 @@ def likes_counter(request, post_id):
             add_like.save()
             post_likes.likes_counter += 1
             post_likes.save()
+
         else:
             del_like = LikedPost.objects.get(user=request.user, liked_post=post_likes)
             del_like.delete()
             post_likes.likes_counter -= 1
             post_likes.save()
 
-        return redirect('list-post')
+    if request.is_ajax and request.method == 'GET':
+        clicked_post = request.GET.get('clicked_post')
+        if LikedPost.objects.filter(liked_post=clicked_post).exists():
+            return JsonResponse({'valid': True}, status=200)
+        else:
+            return JsonResponse({'valid': False})
+
+    return redirect('list-post')
 
 
 def fetch_profile(request, user_id):
@@ -182,6 +190,5 @@ def edit_form(request, post_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         content = json.load(request)['content']
         Post.objects.filter(user=request.user, id=post_id).update(content=content)
-
 
     return render(request, 'network/index.html')
