@@ -38,6 +38,8 @@ class LikedPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liked_post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.liked_post.id)
 
 class ListFollowing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

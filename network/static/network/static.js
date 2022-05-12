@@ -2,8 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
         id.forEach(link_func)
 
         function link_func(value){
-
-          document.getElementById('edit_link_' + value).onclick = function(){
+        try{
+          document.getElementById('edit_link_' + value).onclick = function(e){
+            e.preventDefault()
             document.getElementById('edit_link_' + value).style.display = 'none'
             p_element = document.getElementById('edit_link_' + value + '_p')
             textarea_data = p_element.innerHTML
@@ -47,11 +48,36 @@ document.addEventListener('DOMContentLoaded', () => {
             })
 
             document.getElementById('form_'+value).style.display = 'none'
-            document.getElementById('edit_link_' + value).style.display = 'block'
+            document.getElementById('edit_link_' + value).style.display = 'inline-block'
+             document.getElementById('edit_link_' + value + '_p').style.display = 'inline-block'
             document.getElementById('edit_link_' + value + '_p').innerHTML =  content
-            document.getElementById('edit_link_' + value + '_p').style.display = ''
-            document.getElementById('button_'+value).style.display = 'none'
           })
+        }}
+        catch(error){
         }
+
+         document.getElementById('like_link_' + value).onclick = function(e){
+         e.preventDefault()
+         console.log('clicked')
+           fetch(`likes/counter/${value}`,{
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                    'Accept': 'application/javascript',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken':csrftoken,
+            },
+            })
+            .then (response => {
+                console.log(response)
+            })
+            .catch( error => {
+                console.log('Error: ' + error)
+            })
+
+
+
+         }
+
 };
 });

@@ -102,13 +102,20 @@ def create_post(request):
 
 # TODO
 def likes_counter(request, post_id):
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        post_likes = Post.objects.get(pk=post_id)
+        if not LikedPost.objects.filter(user=request.user, liked_post=post_likes):
+            add_like = LikedPost.objects.create(user=request.user, liked_post=post_likes)
+            add_like.save()
+            post_likes.likes_counter += 1
+            post_likes.save()
+        else:
+            del_like = LikedPost.objects.get(user=request.user, liked_post=post_likes)
+            del_like.delete()
+            post_likes.likes_counter -= 1
+            post_likes.save()
 
-    post_likes = Post.objects.get(pk=post_id)
-    if not LikedPost.objects.filter(user=request.user) == Post.objects.get(pk=post_id):
-        post_likes.likes_counter += 1
-        post_likes.save()
-
-    return redirect('list-post')
+        return redirect('list-post')
 
 
 def fetch_profile(request, user_id):

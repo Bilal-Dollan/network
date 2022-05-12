@@ -11,12 +11,10 @@ let id = []
 <br>
     <div class="card text-center">
         <div class="card-header">
-           Posted by:
+           Posted By:
             <a href=" {% url 'fetch-profile' contact.user.id %}">
                 {{contact.user}}
-
             </a>
-
         </div>
         <div class="card-body">
             <h5 class="card-title" ></h5>
@@ -28,7 +26,7 @@ let id = []
                     <button type="submit" id="submit_{{contact.id}}">Update</button>
                 </form>
                 </div>
-            <a href="{% url 'likes-counter' contact.id %}" style="text-decoration: none">
+            <a href="" style="text-decoration: none" id="like_link_{{contact.id}}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -38,16 +36,16 @@ let id = []
                 </svg>
                 {{contact.likes_counter}}
             </a>
-
-            {% if contact.user == user %}
-                <a href="#" class="edit-post-link" id="edit_link_{{contact.id}}">
-                    edit
-                </a>
-
-            <script>
+   <script>
             id.push('{{contact.id}}')
 
             </script>
+            {% if contact.user == user %}
+                <a href="#" class="edit-post-link" id="edit_link_{{contact.id}}">
+                    Edit
+                </a>
+
+
 
             {% endif %}
 

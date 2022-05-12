@@ -2,7 +2,10 @@
 
 {% block body %}
 
+<script>
+let id = []
 
+</script>
 <br>
 <div class="card text-center">
   <div class="card-header">
@@ -24,13 +27,21 @@
 {% for post in post_list %}
 <div class="card text-center">
   <div class="card-header">
+      Posted By:
       <a href=" {% url 'fetch-profile' post.user.id %}">
           {{post.user}}
       </a>
   </div>
   <div class="card-body">
     <h5 class="card-title"></h5>
-    <p class="card-text">{{ post.content }}</p>
+      <div id="container_{{post.id}}">
+    <p class="card-text" id="edit_link_{{post.id}}_p">{{ post.content }}</p>
+        <form action="." method="post" id="form_{{post.id}}" style="display:none">
+            {% csrf_token %}
+            <textarea cols="100" rows="10" id="textarea_{{post.id}}"></textarea>
+            <button type="submit" id="submit_{{post.id}}">Update</button>
+        </form>
+      </div>
     <a href="{% url 'likes-counter' post.id %}" style="text-decoration: none">
 
       <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -43,10 +54,13 @@
         {{post.likes_counter}}
     </a>
       {% if post.user == user %}
-      <a href="{% url 'edit-form' post.id %}">
-          Edit
+      <a href="#" class="edit-post-link" id="edit_link_{{post.id}}">
+            Edit
+        </a>
+          <script>
+            id.push('{{post.id}}')
 
-      </a>
+            </script>
       {% endif %}
   </div>
   <div class="card-footer text-muted">
@@ -54,4 +68,8 @@
   </div>
 </div>
 {% endfor %}
+
+<script>
+   const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+</script>
 {% endblock %}
