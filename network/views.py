@@ -100,7 +100,7 @@ def create_post(request):
     })
 
 
-# TODO
+@login_required
 def likes_counter(request, post_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         post_likes = Post.objects.get(pk=post_id)
@@ -109,19 +109,13 @@ def likes_counter(request, post_id):
             add_like.save()
             post_likes.likes_counter += 1
             post_likes.save()
+            return JsonResponse({"message": "Hello there"})
 
         else:
             del_like = LikedPost.objects.get(user=request.user, liked_post=post_likes)
             del_like.delete()
             post_likes.likes_counter -= 1
             post_likes.save()
-
-    if request.is_ajax and request.method == 'GET':
-        clicked_post = request.GET.get('clicked_post')
-        if LikedPost.objects.filter(liked_post=clicked_post).exists():
-            return JsonResponse({'valid': True}, status=200)
-        else:
-            return JsonResponse({'valid': False})
 
     return redirect('list-post')
 
@@ -137,13 +131,19 @@ def fetch_profile(request, user_id):
 
     if user_info == request.user:
         follow = False
-
-    for user in user_list:
-        if UserFollowing.objects.filter(user=user_info, following=user):
+    text = 'Follow'
+    for fuser in user_list:
+        if UserFollowing.objects.filter(user=user_info, following=fuser):
             following_count += 1
 
-        if UserFollowers.objects.filter(user=user_info, followers=user):
+        if UserFollowers.objects.filter(user=user_info, followers=fuser):
             followers_count += 1
+    if request.user.is_authenticated:
+        if UserFollowing.objects.filter(user=request.user, following=user_info).exists():
+            text = 'Unfollow'
+
+    else:
+        follow = False
 
     return render(request, "network/user_profile.html", context={
         'post_list': post_list,
@@ -151,15 +151,19 @@ def fetch_profile(request, user_id):
         'follow': follow,
         'following_count': following_count,
         'followers_count': followers_count,
-        'user': user
+        'user': user,
+        'text': text
     })
 
 
+@login_required
 def follow_user(request, user_id):
+    user = User.objects.get(pk=user_id)
+    following_post = Post.objects.filter(user=user)
     followed_user = User.objects.get(pk=user_id)
     following_user = request.user
     if not UserFollowing.objects.filter(user=following_user, following=followed_user):
-        add_following = UserFollowing.objects.create(user=following_user, following=followed_user)
+        add_following = UserFollowing.objects.create(user=following_user, following=followed_user, following_post=following_post)
         add_follower = UserFollowers.objects.create(user=followed_user, followers=following_user)
         add_follower.save()
         add_following.save()
@@ -169,6 +173,7 @@ def follow_user(request, user_id):
     return redirect('fetch-profile', user_id)
 
 
+@login_required
 def list_following(request):
     login_user = request.user
     all_user = User.objects.all()
@@ -186,6 +191,7 @@ def list_following(request):
     })
 
 
+@login_required
 def edit_form(request, post_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         content = json.load(request)['content']

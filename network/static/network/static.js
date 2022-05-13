@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }}
         catch(error){
         }
-
-         document.getElementById('like_link_' + value).onclick = function(e){
+        link =  document.getElementById('like_link_' + value)
+        link.onclick = function(e){
          e.preventDefault()
          console.log('clicked')
            fetch(`likes/counter/${value}`,{
@@ -69,20 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             })
             .then (response => {
-
+            console.log(response.json('message'))
             })
-            .catch( error => {
-                console.log('Error: ' + error)
-            })
-         let clicked_post = document.getElementById('liked_post' + value).innerHTML
+            .catch( error => {console.log('Error: ' + error)})
+         let clicked_post = link.innerHTML
 
-        $ajax({
-            type: 'GET',
-            url: `likes/counter/${value}`,
-            success:
-                console.log(clicked_post)
 
-        })
 
          }
 

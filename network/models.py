@@ -21,6 +21,7 @@ class Post(models.Model):
 class UserFollowing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
+    following_post = models.ForeignKey(Post,  on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.following)
@@ -40,6 +41,7 @@ class LikedPost(models.Model):
 
     def __str__(self):
         return str(self.liked_post.id)
+
 
 class ListFollowing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
