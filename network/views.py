@@ -110,7 +110,6 @@ def likes_counter(request, post_id):
             post_likes.likes_counter += 1
             post_likes.save()
             return JsonResponse({'body': "add like"})
-
         else:
             del_like = LikedPost.objects.get(user=request.user, liked_post=post_likes)
             del_like.delete()
@@ -164,10 +163,12 @@ def follow_user(request, user_id):
     followed_user = User.objects.get(pk=user_id)
     following_user = request.user
     if not UserFollowing.objects.filter(user=following_user, following=followed_user):
-        add_following = UserFollowing.objects.create(user=following_user, following=followed_user, following_post=following_post)
+        for following_user_post in following_post:
+            add_following = UserFollowing.objects.create(user=following_user, following=followed_user, following_post=following_user_post)
+            add_following.save()
         add_follower = UserFollowers.objects.create(user=followed_user, followers=following_user)
         add_follower.save()
-        add_following.save()
+
     elif UserFollowing.objects.filter(user=following_user, following=followed_user):
         UserFollowing.objects.filter(user=following_user, following=followed_user).delete()
         UserFollowers.objects.filter(user=followed_user, followers=following_user).delete()
@@ -176,10 +177,7 @@ def follow_user(request, user_id):
 
 @login_required
 def list_following(request):
-    login_user = request.user
-    all_user = User.objects.all()
     following_posts = UserFollowing.objects.filter(user=request.user)
-    post = Post.objects.all()
 
     paginator = Paginator(following_posts, 10)
     page_number = request.GET.get('page')
@@ -188,7 +186,6 @@ def list_following(request):
     return render(request, 'network/list_following.html', context={
         'following_posts': following_posts,
         'page_obj': page_obj,
-        'post': post
     })
 
 
