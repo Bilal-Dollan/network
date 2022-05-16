@@ -75,12 +75,14 @@ def list_post(request):
     user = request.user
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    liked_post = LikedPost.objects.all()
 
     return render(request, "network/list_post.html", context={
         "all_post": all_post,
         'page_obj': page_obj,
         'user': user,
-        'form': form
+        'form': form,
+        'liked_post': liked_post
     })
 
 
@@ -100,7 +102,6 @@ def create_post(request):
     })
 
 
-# TODO
 def likes_counter(request, post_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         post_likes = Post.objects.get(pk=post_id)
@@ -109,13 +110,15 @@ def likes_counter(request, post_id):
             add_like.save()
             post_likes.likes_counter += 1
             post_likes.save()
+            return JsonResponse({'body': "add like"})
         else:
             del_like = LikedPost.objects.get(user=request.user, liked_post=post_likes)
             del_like.delete()
             post_likes.likes_counter -= 1
             post_likes.save()
+            return JsonResponse({'body': "remove like"})
 
-        return redirect('list-post')
+    return redirect('list-post')
 
 
 def fetch_profile(request, user_id):
