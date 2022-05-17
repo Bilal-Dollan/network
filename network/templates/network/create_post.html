@@ -1,10 +1,18 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+<style>
+    form{
+    margin:25px
+
+    }
+
+
+</style>
 <form action="{% url 'create-post' %}" method="post">
     {% csrf_token %}
-{{post_form}}
-    <button type="submit">
+{{post_form.as_p}}
+    <button type="submit" class="btn btn-primary">
         Post
     </button>
 

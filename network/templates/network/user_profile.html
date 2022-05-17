@@ -23,67 +23,71 @@ let id = []
   </div>
 </div>
 
-{% for post in post_list %}
-<div class="card text-center">
-  <div class="card-header">
-      Posted By:
-      <a href=" {% url 'fetch-profile' post.user.id %}">
-          {{post.user}}
-      </a>
-  </div>
-  <div class="card-body">
-    <h5 class="card-title"></h5>
-      <div id="container_{{post.id}}">
-    <p class="card-text" id="edit_link_{{post.id}}_p">{{ post.content }}</p>
-        <form action="." method="post" id="form_{{post.id}}" style="display:none">
-            {% csrf_token %}
-            <textarea cols="100" rows="10" id="textarea_{{post.id}}"></textarea>
-            <button type="submit" id="submit_{{post.id}}">Update</button>
-        </form>
-      </div>
-      {% if user.is_authenticated %}
-    <a href="{% url 'likes-counter' post.id %}" style="text-decoration: none">
 
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
-         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-         <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
-         <path d="M14 16h6"></path>
-         <path d="M17 13v6"></path>
-      </svg>
-        {{post.likes_counter}}
-    </a>
-      {% else %}
-          <a href="{% url 'register' %}" style="text-decoration: none">
 
-      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-         <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
-         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-         <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
-         <path d="M14 16h6"></path>
-         <path d="M17 13v6"></path>
-      </svg>
-        {{post.likes_counter}}
-    </a>
-{% endif %}
+{% for contact in post_list reversed %}
 
-      {% if post.user == user %}
-      <a href="#" class="edit-post-link" id="edit_link_{{post.id}}">
-            Edit
-        </a>
-          <script>
-            id.push('{{post.id}}')
+<br>
+    <div class="card text-center">
+        <div class="card-header">
+           Posted By:
+            <a href=" {% url 'fetch-profile' contact.user.id %}">
+                {{contact.user}}
+            </a>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" ></h5>
+            <div id="container_{{contact.id}}">
+            <p class="card-text" id="edit_link_{{contact.id}}_p">{{ contact.content }}</p>
+                <form action="." method="post" id="form_{{contact.id}}" style="display:none">
+                    {% csrf_token %}
+                    <textarea cols="100" rows="10" id="textarea_{{contact.id}}"></textarea>
+                    <button type="submit" id="submit_{{contact.following_post.id}}">Update</button>
+                </form>
+                </div>
+
+            <a href="" style="text-decoration: none" id="like_link_{{contact.id}}">
+                <span id="like_icon{{contact.id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                       <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
+                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                       <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
+                       <path d="M14 16h6"></path>
+                       <path d="M17 13v6"></path>
+                    </svg>
+                </span>
+                <span id="span_like_counter_{{contact.id}}">
+                    {{contact.likes_counter}}
+                </span>
+
+            </a>
+   <script>
+            id.push('{{contact.id}}')
 
             </script>
-      {% endif %}
-  </div>
-  <div class="card-footer text-muted">
-    {{ post.time_created }}
-  </div>
-</div>
+            {% if contact.user == user %}
+                <a href="#" class="edit-post-link" id="edit_link_{{contact.id}}">
+                    Edit
+                </a>
+
+
+
+            {% endif %}
+
+        </div>
+        <div class="card-footer text-muted" >
+            At: {{ contact.time_created }}
+        </div>
+    </div>
+
+
+
 {% endfor %}
+
+<br>
 
 <script>
    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 </script>
+
 {% endblock %}

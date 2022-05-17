@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({'content': content})
             })
             .then (response => {
-                console.log(response)
+
             })
             .catch( error => {
                 console.log('Error: ' + error)
@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         link =  document.getElementById('like_link_' + value)
         link.onclick = function(e){
          e.preventDefault()
-         console.log('clicked')
            fetch(`likes/counter/${value}`,{
             method: 'POST',
             credentials: 'same-origin',
@@ -73,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             })
             .then (data => {
-            console.log(data.body)
+
              if (data.body == 'add like'){
                 a = document.getElementById('span_like_counter_' + value)
                 like_counter = parseInt(a.innerHTML)
@@ -97,12 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon = document.getElementById('like_icon' + value)
                 icon.innerHTML = ''
                 icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-heart-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-   <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
-   <path d="M14 16h6"></path>
-   <path d="M17 13v6"></path>
-</svg>`
+                                       <desc>Download more icon variants from https://tabler-icons.io/i/heart-plus</desc>
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M13 19l-1 1l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 0 1 8.003 5.996"></path>
+                                       <path d="M14 16h6"></path>
+                                       <path d="M17 13v6"></path>
+                                    </svg>`
              }
             })
             .catch( error => {

@@ -179,7 +179,7 @@ def follow_user(request, user_id):
 def list_following(request):
     following_posts = UserFollowing.objects.filter(user=request.user)
 
-    paginator = Paginator(following_posts, 10)
+    paginator = Paginator(following_posts, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
